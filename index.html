@@ -97,13 +97,6 @@ button {
 </div>
 
 <div class="message-box">
-<p>______________________________________________________________...HI<br>
-PLEASE LEAVE ME A MESSAGE 
-FOR ME ON MY BIRTHDAY <br>
-____________________________________________________LOVE U✨</p>
-</div>
-
-<div class="message-box">
 <h2>Leave a Message 🎂</h2>
 <input type="text" id="senderName" placeholder="Your name">
 <textarea id="messageText" rows="4" placeholder="your message here..."></textarea>
@@ -155,7 +148,7 @@ sendButton.addEventListener('click', async (e) => {
             });
 
             successStatus.style.display = "block";
-            alert("merci! ✨");
+            alert("merci!your message had been sent ✨");
 
             nameInput.value = "";
             messageInput.value = "";
@@ -182,7 +175,7 @@ sendButton.addEventListener('click', async (e) => {
 function checkPassword() {
     const password = document.getElementById("passwordInput").value;
 
-    if (password === "jana123") { // غيري الباسورد هنا
+    if (password === "love") { // غيري الباسورد هنا
         document.getElementById("lockScreen").style.display = "none";
     } else {
         alert("Wrong password!");
