@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Messages</title>
+
+<style>
+body {
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding: 50px;
+    font-family: Arial, sans-serif;
+    font-style: italic;
+    font-weight: bold;
+}
+
+/* شاشة الباسورد */
+#lockScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #b9005d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    flex-direction: column;
+    color: white;
+}
+
+#lockScreen input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+#lockScreen button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    background: #83abe7;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.message-box {
+    width: 40%;
+    background-color: #b9005d;
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+}
+
+input, textarea {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #83abe7;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+#successStatus {
+    margin-top: 15px;
+    text-align: center;
+    color: #afffb0;
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- شاشة الباسورد -->
+<div id="lockScreen">
+    <h2>Enter Password 🔒</h2>
+    <input type="password" id="passwordInput" placeholder="Password">
+    <button onclick="checkPassword()">Enter</button>
+</div>
+
+<div class="message-box">
+<p>______________________________________________________________...HI<br>
+PLEASE LEAVE ME A MESSAGE 
+FOR ME ON MY BIRTHDAY <br>
+____________________________________________________LOVE U✨</p>
+</div>
+
+<div class="message-box">
+<h2>Leave a Message 🎂</h2>
+<input type="text" id="senderName" placeholder="Your name">
+<textarea id="messageText" rows="4" placeholder="your message here..."></textarea>
+<button id="sendBtn">Send Message</button>
+<div id="successStatus">merci! Your message has been sent. ✨</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "jana-birthday.firebaseapp.com",
+    projectId: "jana-birthday",
+    storageBucket: "jana-birthday.appspot.com",
+    messagingSenderId: "YOUR_ID",
+    appId: "YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const nameInput = document.getElementById('senderName');
+const messageInput = document.getElementById('messageText');
+const sendButton = document.getElementById('sendBtn');
+const successStatus = document.getElementById('successStatus');
+
+sendButton.addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    const name = nameInput.value.trim();
+    const text = messageInput.value.trim();
+
+    if (name === "") {
+        alert("Please enter your name!");
+        return;
+    }
+
+    if (text !== "") {
+        try {
+            sendButton.disabled = true;
+            sendButton.innerText = "Sending...";
+
+            await addDoc(collection(db, "messages"), {
+                sender: name,
+                content: text,
+                createdAt: serverTimestamp()
+            });
+
+            successStatus.style.display = "block";
+            alert("merci! ✨");
+
+            nameInput.value = "";
+            messageInput.value = "";
+
+            sendButton.disabled = false;
+            sendButton.innerText = "Send Message";
+
+            setTimeout(() => {
+                successStatus.style.display = "none";
+            }, 5000);
+
+        } catch (error) {
+            alert("Error!");
+            sendButton.disabled = false;
+            sendButton.innerText = "Send Message";
+        }
+    } else {
+        alert("please leave a message first!");
+    }
+});
+</script>
+
+<script>
+function checkPassword() {
+    const password = document.getElementById("passwordInput").value;
+
+    if (password === "jana123") { // غيري الباسورد هنا
+        document.getElementById("lockScreen").style.display = "none";
+    } else {
+        alert("Wrong password!");
+    }
+}
+</script>
+
+</body>
+</html>
